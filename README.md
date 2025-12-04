@@ -97,10 +97,10 @@ Edit `config_v2.json`:
 
 ```bash
 # Demo mode (paper trading)
-python highprob_bot_v2.py
+python spike.py
 
 # Live trading (edit config: "mode": "live")
-python highprob_bot_v2.py
+python spike.py
 ```
 
 ## ⚙️ Configuration Reference
