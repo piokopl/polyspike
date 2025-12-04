@@ -1,0 +1,127 @@
+{
+  "_comment": "High Probability Bot v2 Configuration",
+  
+  "mode": "demo",
+  "_mode_options": "demo = simulation, live = real trading with real money!",
+  
+  "credentials": {
+    "private_key": "",
+    "wallet_address": "",
+    "signature_type": 0,
+    "_comment": "Set here or use env vars POLY_PRIVATE_KEY and POLY_WALLET_ADDRESS. signature_type: 0=EOA, 2=Browser proxy"
+  },
+  
+  "gamma_markets_url": "https://gamma-api.polymarket.com/markets",
+  "timezone": "Europe/Berlin",
+  "output_file": "opportunities.json",
+  
+  "price_min": 0.80,
+  "price_max": 0.95,
+  "price_min_yes": 0.80,
+  "price_max_yes": 0.95,
+  "price_min_no": 0.80,
+  "price_max_no": 0.95,
+  
+  "min_volume_24h": 1000,
+  "min_liquidity": 1000,
+  "min_open_interest": 0,
+  "min_upside": 0.01,
+  "min_rr_ratio": 0.0,
+  
+  "min_time_to_end_hours": 0.5,
+  "max_time_to_end_hours": 168,
+  
+  "max_tokens": 1000,
+  "require_token_id": true,
+  
+  "excluded_keywords": [
+    "bitcoin", "btc", "ethereum", "eth", "crypto", "solana", "sol", 
+    "dogecoin", "doge", "xrp", "cardano", "ada", "polygon", "matic"
+  ],
+  "_excluded_keywords_comment": "Markets containing these words (case-insensitive) will be skipped",
+  
+  "score_weights": {
+    "time_to_end": 0.6,
+    "volume_24h": 0.25,
+    "liquidity": 0.15
+  },
+  
+  "trading": {
+    "max_slots": 5,
+    "trade_amount_usd": 2.0,
+    "stop_loss": 0.70,
+    "stop_loss_enabled": true,
+    "take_profit": 0.99,
+    "check_interval_seconds": 5,
+    "max_slippage": 0.02,
+    "_comment": "stop_loss_enabled: false to disable SL (hold until resolution)"
+  },
+  
+  "dynamic_tp": {
+    "enabled": true,
+    "min_profit_pct": 0.05,
+    "max_profit_pct": 0.19,
+    "base_target": 0.99,
+    "_comment": "Entry 0.90 -> TP ~0.97 (7%), Entry 0.95 -> TP ~0.98 (3%)"
+  },
+  
+  "trailing_sl": {
+    "enabled": false,
+    "activation_pct": 0.02,
+    "trail_pct": 0.03,
+    "_comment": "Activates after 2% profit, trails 3% below peak price"
+  },
+  
+  "websocket": {
+    "enabled": true,
+    "url": "wss://ws-subscriptions-clob.polymarket.com/ws/market",
+    "_comment": "Real-time price updates instead of polling"
+  },
+  
+  "telegram": {
+    "enabled": false,
+    "bot_token": "",
+    "chat_id": "",
+    "notify_trades": true,
+    "notify_daily_summary": true,
+    "_comment": "Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID in .env or here"
+  },
+  
+  "discord": {
+    "enabled": false,
+    "webhook_url": "",
+    "notify_trades": true,
+    "notify_daily_summary": true,
+    "_comment": "Set DISCORD_WEBHOOK_URL in .env or here"
+  },
+  
+  "ai": {
+    "enabled": false,
+    "api_key": "",
+    "block_on_uncertain": true,
+    "emergency_enabled": false,
+    "cache_hours": 24,
+    "min_confidence": 0.7,
+    "analyst_enabled": true,
+    "analyst_interval_minutes": 60,
+    "_comment": "analyst: hourly AI analysis of positions. Set analyst_enabled:true + api_key"
+  },
+  
+  "news": {
+    "enabled": true,
+    "sources": ["google"],
+    "newsapi_key": "",
+    "max_headlines": 3,
+    "cache_minutes": 15,
+    "_comment": "sources: 'google' (free) and/or 'newsapi' (needs key from newsapi.org)"
+  },
+  
+  "files": {
+    "opportunities": "opportunities.json",
+    "positions": "positions.json",
+    "blacklist": "blacklist.json",
+    "trades_history": "trades_history.csv",
+    "prices_log": "prices_log.json",
+    "stats": "stats.json"
+  }
+}
