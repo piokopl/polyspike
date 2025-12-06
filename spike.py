@@ -194,6 +194,9 @@ class Position:
     close_reason: str = ""
     pnl_usd: float = 0.0
     pnl_pct: float = 0.0
+    
+    # Sell retry tracking
+    sell_retries: int = 0
 
 # ==================== TELEGRAM NOTIFIER ====================
 class TelegramNotifier:
@@ -2657,7 +2660,12 @@ class HighProbBot:
                     
                     result = self.poly_client.place_sell_order(token_id, pos.shares, pos.current_price)
                     if not result:
-                        log(f"   ⚠️ SELL failed - will retry next cycle", "WARN")
+                        pos.sell_retries += 1
+                        if pos.sell_retries >= 3:
+                            log(f"   ❌ SELL failed 3x - removing phantom position", "WARN")
+                            positions_to_close.append((token_id, "PHANTOM_REMOVED", pos.current_price))
+                        else:
+                            log(f"   ⚠️ SELL failed ({pos.sell_retries}/3) - will retry", "WARN")
                         continue  # Don't close position if sell failed
                 
                 positions_to_close.append((token_id, "TAKE_PROFIT", pos.current_price))
@@ -2693,7 +2701,12 @@ class HighProbBot:
                     
                     result = self.poly_client.place_sell_order(token_id, pos.shares, pos.current_price)
                     if not result:
-                        log(f"   ⚠️ SELL failed - will retry next cycle", "WARN")
+                        pos.sell_retries += 1
+                        if pos.sell_retries >= 3:
+                            log(f"   ❌ SELL failed 3x - removing phantom position", "WARN")
+                            positions_to_close.append((token_id, "PHANTOM_REMOVED", pos.current_price))
+                        else:
+                            log(f"   ⚠️ SELL failed ({pos.sell_retries}/3) - will retry", "WARN")
                         continue  # Don't close position if sell failed
                 
                 positions_to_close.append((token_id, sl_type, pos.current_price))
@@ -2727,7 +2740,12 @@ class HighProbBot:
                             
                             result = self.poly_client.place_sell_order(token_id, pos.shares, pos.current_price)
                             if not result:
-                                log(f"   ⚠️ SELL failed - will retry next cycle", "WARN")
+                                pos.sell_retries += 1
+                                if pos.sell_retries >= 3:
+                                    log(f"   ❌ SELL failed 3x - removing phantom position", "WARN")
+                                    positions_to_close.append((token_id, "PHANTOM_REMOVED", pos.current_price))
+                                else:
+                                    log(f"   ⚠️ SELL failed ({pos.sell_retries}/3) - will retry", "WARN")
                                 continue  # Don't close position if sell failed
                         
                         positions_to_close.append((token_id, "AI_EMERGENCY", pos.current_price))
